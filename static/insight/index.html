@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="stylesheet" href="src/style.css" />
+    <script type="importmap">
+      { "imports": { "three": "./vendor/three/build/three.module.js", "three/addons/": "./vendor/three/examples/jsm/" } }
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NASA InSight VR</title>
+  </head>
+  <body>
+    <div id="start-screen" class="overlay">
+      <div class="start-card">
+        <p class="eyebrow">Elysium Planitia · Mars</p>
+        <h1>InSight</h1>
+        <p class="subtitle">Stand beside NASA's Mars lander and its seismometer.</p>
+        <button id="begin-btn" type="button">Begin</button>
+        <p class="hint">Desktop: mouse + keyboard · Headset: use Enter VR below</p>
+        <p class="credit">InSight lander model: NASA/JPL-Caltech (NASA 3D Resources)</p>
+      </div>
+    </div>
+
+    <div id="hud" class="hud" hidden>
+      Click to look around · WASD / arrows to move · Shift to run · Esc to release mouse
+    </div>
+
+    <div id="crosshair" class="crosshair" hidden></div>
+
+    <div id="notice" class="notice" hidden></div>
+
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>

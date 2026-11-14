@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مهندس المهمة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+  /* NASA-inspired palette (colors only, no NASA logo) */
+  :root {
+    --space:#050A1A; --night:#0A1433; --blue:#0B3D91; --blue2:#2F6BD8; --red:#FC3D21; --red-d:#D92E14;
+    --rust:#C2603A; --dust:#F2C9A8; --ink:#F4F6FB; --muted:#B8C2DC; --ok:#4CC38A;
+    --line:rgba(244,246,251,.14);
+    --display:"Reem Kufi","Segoe UI",Tahoma,sans-serif;
+  }
+  html[lang="en"] { --display:"Space Grotesk","Segoe UI",Tahoma,sans-serif; }
+  * { box-sizing:border-box; }
+  [hidden] { display:none !important; }
+  html, body { height:100%; }
+  body {
+    margin:0; font-family:"Segoe UI",Tahoma,system-ui,sans-serif; color:var(--ink);
+    background:
+      radial-gradient(1px 1px at 12% 18%, #fff 50%, transparent 51%),
+      radial-gradient(1px 1px at 28% 72%, #fff 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 44% 34%, #fff 50%, transparent 51%),
+      radial-gradient(1px 1px at 63% 12%, #fff 50%, transparent 51%),
+      radial-gradient(1px 1px at 77% 58%, #fff 50%, transparent 51%),
+      radial-gradient(1.5px 1.5px at 88% 84%, #fff 50%, transparent 51%),
+      radial-gradient(ellipse at 80% -10%, rgba(47,107,216,.45), transparent 55%),
+      radial-gradient(ellipse at 50% 130%, rgba(194,96,58,.45), transparent 55%),
+      var(--space);
+    display:flex; flex-direction:column;
+  }
+  header { display:flex; align-items:center; gap:12px; padding:16px 24px; border-bottom:1px solid var(--line); }
+  .orbit { width:32px; height:32px; border-radius:50%; background:var(--blue); position:relative; flex:none; box-shadow:0 0 0 2px rgba(255,255,255,.15); }
+  .orbit::after { content:""; position:absolute; inset:7px -6px; border:2px solid var(--red); border-radius:50%; transform:rotate(-25deg); }
+  header h1 { margin:0; font-family:var(--display); font-size:20px; font-weight:700; }
+  header p { margin:2px 0 0; font-size:12.5px; color:var(--muted); }
+  .lang { margin-inline-start:auto; background:transparent; color:var(--ink); border:1px solid rgba(244,246,251,.4);
+          padding:7px 14px; font-size:14px; font-weight:600; border-radius:10px; cursor:pointer; }
+
+  main { flex:1; display:grid; place-items:center; padding:26px 18px; }
+  .card { width:100%; max-width:600px; border-radius:24px; padding:34px 32px; text-align:center; position:relative;
+          background:linear-gradient(160deg, rgba(11,61,145,.35), rgba(10,20,51,.75)); border:1px solid var(--line);
+          box-shadow:0 30px 80px -40px rgba(0,0,0,.9); }
+  .signal { display:inline-flex; align-items:center; gap:10px; padding:6px 14px 6px 12px; border-radius:999px; margin-bottom:18px;
+            background:rgba(252,61,33,.14); border:1px solid rgba(252,61,33,.4); color:#FFC2B6; font-size:13.5px; font-weight:600; }
+  .signal svg { flex:none; }
+  h2 { font-family:var(--display); font-size:clamp(26px,4.4vw,34px); line-height:1.25; margin:0 0 12px; font-weight:700; }
+  .lead { color:var(--muted); font-size:16.5px; line-height:1.8; margin:0 0 26px; }
+  .buttons { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+  button { font:inherit; font-size:16px; font-weight:700; border-radius:12px; padding:14px 26px; cursor:pointer; border:2px solid transparent;
+           transition:transform .08s ease, background .15s ease; }
+  button:active { transform:scale(.98); }
+  button:focus-visible, textarea:focus-visible { outline:3px solid #FFD2C9; outline-offset:3px; }
+  .primary { background:var(--red); color:#fff; }
+  .primary:hover { background:var(--red-d); }
+  .secondary { background:transparent; color:var(--ink); border-color:rgba(244,246,251,.45); }
+  .secondary:hover { background:rgba(244,246,251,.08); }
+  .link { background:none; border:0; color:var(--muted); font-weight:400; font-size:14px; padding:8px; text-decoration:underline; }
+
+  .problem { text-align:start; margin:0 0 18px; padding:14px 18px; border-radius:14px; background:rgba(5,10,26,.55);
+             border-inline-start:4px solid var(--rust); }
+  .problem small { display:block; color:var(--dust); font-size:13px; font-weight:700; margin-bottom:4px; }
+  .problem p { margin:0; color:#DCE3F2; font-size:15.5px; line-height:1.7; }
+  textarea { width:100%; min-height:140px; resize:vertical; margin:0 0 10px; padding:16px; border-radius:14px;
+             border:1px solid rgba(244,246,251,.25); background:rgba(5,10,26,.75); color:var(--ink); font:inherit; font-size:16px; line-height:1.7; }
+  textarea:focus { border-color:var(--blue2); }
+  .hint { color:var(--muted); font-size:13px; margin:0 0 18px; text-align:start; }
+
+  /* loading: a probe circling Mars */
+  .orbiter { width:120px; height:120px; margin:4px auto 20px; position:relative; }
+  .orbiter .planet { position:absolute; inset:34px; border-radius:50%; background:radial-gradient(circle at 35% 30%, #E48A5C, var(--rust) 55%, #6E2A16); }
+  .orbiter .ring { position:absolute; inset:6px; border-radius:50%; border:1.5px dashed rgba(244,246,251,.3); animation:spin 2.4s linear infinite; }
+  .orbiter .ring::after { content:""; position:absolute; top:-6px; left:50%; width:12px; height:12px; margin-left:-6px; border-radius:50%; background:var(--red); box-shadow:0 0 12px var(--red); }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  /* result */
+  .patch { width:132px; height:132px; margin:0 auto 16px; display:block; animation:pop .6s cubic-bezier(.2,1.6,.4,1) both; }
+  @keyframes pop { from { transform:scale(.4) rotate(-20deg); opacity:0; } }
+  .status { font-family:var(--display); font-size:24px; line-height:1.4; margin:0 0 12px; font-weight:700; }
+  .status.ok { color:#9BEBC0; }
+  .msg { font-size:17px; line-height:1.85; margin:0 0 6px; color:#DCE3F2; }
+  .error { color:#FFB3A6; }
+  @media (prefers-reduced-motion: reduce) { .orbiter .ring, .patch { animation:none; } }
+
+  footer { padding:12px 24px; border-top:1px solid var(--line); color:var(--muted); font-size:12.5px; display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  footer select { background:transparent; color:var(--muted); border:1px solid var(--line); border-radius:6px; padding:3px 6px; }
+  footer select option { color:#000; }
+</style>
+</head>
+<body>
+<header>
+  <div class="orbit" aria-hidden="true"></div>
+  <div>
+    <h1 data-i18n="appName">مهندس المهمة</h1>
+    <p data-i18n="byline">مشروع فريق إنترستيلر لتحدي سبيس آبس</p>
+  </div>
+  <button class="lang" id="btnLang" type="button">English</button>
+</header>
+
+<main>
+  <!-- 1. Ask: suggest or not -->
+  <section id="s-ask" class="card">
+    <span class="signal"><svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true"><rect x="0" y="9" width="3" height="5" rx="1" fill="#FC3D21"/><rect x="5" y="6" width="3" height="8" rx="1" fill="#FC3D21"/><rect x="10" y="3" width="3" height="11" rx="1" fill="#FC3D21"/><rect x="15" y="0" width="3" height="14" rx="1" fill="#FC3D21" opacity=".45"/></svg><span id="problemChip" dir="auto"></span></span>
+    <h2 data-i18n="askTitle"></h2>
+    <p class="lead" data-i18n="askText"></p>
+    <div class="buttons">
+      <button class="primary" id="btnYes" data-i18n="yes"></button>
+      <button class="secondary" id="btnNo" data-i18n="no"></button>
+    </div>
+  </section>
+
+  <!-- 2. No thanks -->
+  <section id="s-no" class="card" hidden>
+    <h2 data-i18n="noTitle"></h2>
+    <p class="lead" data-i18n="noText"></p>
+    <button class="secondary" data-go="s-ask" data-i18n="back"></button>
+  </section>
+
+  <!-- 3. Write the idea -->
+  <section id="s-form" class="card" hidden>
+    <h2 data-i18n="formTitle"></h2>
+    <div class="problem"><small data-i18n="problemLabel"></small><p id="problemText"></p></div>
+    <textarea id="idea" dir="auto" data-i18n-ph="placeholder"></textarea>
+    <p class="hint" data-i18n="hint"></p>
+    <div class="buttons">
+      <button class="primary" id="btnSubmit" data-i18n="submit"></button>
+    </div>
+    <button class="link" data-go="s-ask" data-i18n="back"></button>
+  </section>
+
+  <!-- 4. Loading -->
+  <section id="s-loading" class="card" hidden>
+    <div class="orbiter" aria-hidden="true"><div class="planet"></div><div class="ring"></div></div>
+    <p class="lead" data-i18n="loading"></p>
+  </section>
+
+  <!-- 5. Result -->
+  <section id="s-result" class="card" hidden>
+    <svg class="patch" id="resultPatch" viewBox="0 0 132 132" aria-hidden="true" hidden>
+      <circle cx="66" cy="66" r="62" fill="#0B3D91"/><circle cx="66" cy="66" r="54" fill="none" stroke="#F4F6FB" stroke-width="4"/>
+      <ellipse cx="66" cy="66" rx="44" ry="17" transform="rotate(-26 66 66)" fill="none" stroke="#FC3D21" stroke-width="6"/>
+      <circle cx="66" cy="66" r="20" fill="#D9653B"/>
+      <path d="M97 30l3.5 7.5 8 1-6 5.5 1.6 8-7.1-4-7.1 4 1.6-8-6-5.5 8-1z" fill="#F4F6FB"/>
+    </svg>
+    <p id="resultStatus" class="status"></p>
+    <p id="resultMsg" class="msg" dir="auto"></p>
+  </section>
+</main>
+
+<footer>
+  <label><span data-i18n="testLabel"></span>
+    <select id="problemSelect"></select>
+  </label>
+</footer>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const screens = ["s-ask", "s-no", "s-form", "s-loading", "s-result"];
+const T = {
+  ar: {
+    appName: "مهندس المهمة", byline: "مشروع فريق إنترستيلر لتحدي سبيس آبس", switchTo: "English",
+    askTitle: "انتهت القصة، لكن المهمة لم تنتهِ",
+    askText: "هل تريد أن تقترح حلاً يمنع تكرار هذا الفشل في المهمة القادمة؟",
+    yes: "نعم، أريد أن أقترح", no: "لا، شكراً",
+    noTitle: "شكراً لاستكشافك!", noText: "يمكنك العودة واقتراح فكرة في أي وقت.", back: "رجوع",
+    formTitle: "كيف تنقذ المهمة القادمة؟", placeholder: "كيف نمنع هذا الفشل في المهمة القادمة؟ اكتب فكرتك بأي لهجة، حتى لو كانت بسيطة...",
+    hint: "لا تكتب اسمك أو أي معلومات شخصية.", submit: "أرسل اقتراحي",
+    loading: "مهندس المهمة يدرس فكرتك...",
+    sent: "فكرتك قوية واختيرت لتقرير الأفكار الموجّه لناسا", notSent: "شكراً على فكرتك!",
+    errorTitle: "حدث خطأ", errorText: "لم نستطع تقييم الفكرة الآن. حاول مرة أخرى بعد قليل.",
+    testLabel: "المشكلة: ", problemLabel: "ما الذي فشل؟"
+  },
+  en: {
+    appName: "Mission Engineer", byline: "Team Interstellar · Space Apps Challenge project", switchTo: "العربية",
+    askTitle: "The story is over, but the mission isn't",
+    askText: "Do you want to suggest a way to stop this failure from happening on the next mission?",
+    yes: "Yes, I want to suggest", no: "No, thanks",
+    noTitle: "Thanks for exploring!", noText: "You can come back and suggest an idea any time.", back: "Back",
+    formTitle: "How would you save the next mission?", placeholder: "How could the next mission avoid this failure? Write your idea, even if it's simple...",
+    hint: "Don't write your name or any personal information.", submit: "Submit my idea",
+    loading: "Mission Engineer is studying your idea...",
+    sent: "Your idea is strong and was chosen for the ideas report for NASA", notSent: "Thank you for your idea!",
+    errorTitle: "Something went wrong", errorText: "We couldn't evaluate your idea right now. Please try again in a moment.",
+    testLabel: "Problem: ", problemLabel: "What failed?"
+  }
+};
+const params = new URLSearchParams(location.search);
+let lang = params.get("lang") === "en" ? "en" : "ar";
+let problems = [];
+let currentProblem = null;
+// Default: InSight (the NASA resource the 3D scene is built on). ?problem=<id> still picks another.
+const DEFAULT_PROBLEM = "cohesive_soil";
+
+function show(id) { screens.forEach(s => $(s).hidden = (s !== id)); }
+
+// Tell the 3D site (when this page is embedded in it) how the challenge ended,
+// so the Mission Reel adds the engineer badge only when badge is true.
+function notifySite(decision) {
+  if (window.parent === window) return;
+  window.parent.postMessage({
+    type: "mission-engineer-result",
+    problem_id: currentProblem ? currentProblem.id : null,
+    decision: decision,                      // "send_to_nasa" | "do_not_send" | "skipped" | "error"
+    badge: decision === "send_to_nasa"
+  }, "*");
+}
+
+function applyLanguage() {
+  const t = T[lang];
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+  document.title = t.appName;
+  document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t[el.dataset.i18n]);
+  document.querySelectorAll("[data-i18n-ph]").forEach(el => el.placeholder = t[el.dataset.i18nPh]);
+  $("btnLang").textContent = t.switchTo;
+  if (problems.length) {
+    $("problemSelect").innerHTML = problems.map(p =>
+      `<option value="${p.id}">${lang === "ar" ? p.title_ar : p.title}</option>`).join("");
+    if (currentProblem) setProblem(currentProblem.id);
+  }
+}
+
+function setProblem(id) {
+  currentProblem = problems.find(p => p.id === id) || problems.find(p => p.id === DEFAULT_PROBLEM) || problems[0];
+  $("problemChip").textContent = lang === "ar" ? currentProblem.title_ar : currentProblem.title;
+  $("problemText").textContent = lang === "ar" ? currentProblem.problem_ar : currentProblem.problem;
+  $("problemSelect").value = currentProblem.id;
+}
+
+async function init() {
+  // Inside the 3D site the machine is already chosen: hide the problem list
+  if (window.parent !== window) { document.querySelector("footer").hidden = true; document.querySelector("header").hidden = true; }
+  applyLanguage();
+  const res = await fetch("/api/problems");
+  problems = (await res.json()).problems;
+  applyLanguage();
+  // The 3D / 360 site can open this page with ?problem=<id>&lang=ar|en
+  setProblem(params.get("problem"));
+}
+
+async function submitIdea() {
+  const text = $("idea").value.trim();
+  if (text.length < 5) { $("idea").focus(); return; }
+  const t = T[lang];
+  show("s-loading");
+  try {
+    const res = await fetch("/api/evaluate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ problem_id: currentProblem.id, text, language: lang })
+    });
+    const r = await res.json();
+    if (!res.ok) throw new Error(r.error || "Error");
+    const sent = r.decision === "send_to_nasa";
+    $("resultPatch").hidden = !sent;
+    $("resultStatus").className = "status" + (sent ? " ok" : "");
+    $("resultStatus").textContent = sent ? t.sent : t.notSent;
+    $("resultMsg").classList.remove("error");
+    $("resultMsg").textContent = r.message_to_user || "";
+    notifySite(r.decision);
+  } catch (e) {
+    notifySite("error");
+    $("resultPatch").hidden = true;
+    $("resultStatus").className = "status";
+    $("resultStatus").textContent = t.errorTitle;
+    $("resultMsg").classList.add("error");
+    $("resultMsg").textContent = t.errorText;
+    console.error(e);
+  }
+  show("s-result");
+}
+
+$("btnYes").onclick = () => { show("s-form"); $("idea").focus(); };
+$("btnNo").onclick = () => { show("s-no"); notifySite("skipped"); };
+$("btnSubmit").onclick = submitIdea;
+$("btnLang").onclick = () => { lang = lang === "ar" ? "en" : "ar"; applyLanguage(); };
+document.querySelectorAll("[data-go]").forEach(b => b.onclick = () => show(b.dataset.go));
+$("problemSelect").onchange = (e) => { setProblem(e.target.value); show("s-ask"); };
+
+init();
+</script>
+
+</body>
+</html>

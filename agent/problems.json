@@ -1,0 +1,105 @@
+{
+  "mars_environment": [
+    "Thin atmosphere, less than 1% as dense as Earth's",
+    "Frequent dust and occasional planet-wide dust storms",
+    "Very cold, especially at night and in winter",
+    "Lower gravity than Earth",
+    "No liquid water on the surface",
+    "No humans to repair anything",
+    "Commands from Earth take minutes to arrive"
+  ],
+  "problems": [
+    {
+      "id": "dust_solar_panels",
+      "title": "Dust on solar panels (Opportunity, InSight)",
+      "title_ar": "الغبار على الألواح الشمسية (أبورتشونيتي وإنسايت)",
+      "artifacts": [
+        "Opportunity rover",
+        "InSight lander"
+      ],
+      "problem": "Dust stops sunlight from reaching the solar panels, so the spacecraft runs out of power.",
+      "problem_ar": "الغبار يمنع ضوء الشمس من الوصول إلى الألواح الشمسية، فتنفد طاقة المركبة.",
+      "root_cause": "Martian dust settles on the panels or blocks the Sun during dust storms. A planet-wide storm in June 2018 cut Opportunity's power, and dust buildup reduced InSight's power until its mission ended.",
+      "nasa_tried": [
+        "Sent more than 1,000 recovery commands to Opportunity after the storm",
+        "Tried to shake InSight's panels with their deployment motors (did not work)",
+        "Trickled sand near InSight's panels in the wind with the robotic arm scoop (small power gain only)",
+        "Large rovers such as Curiosity use nuclear power instead of solar (a known option, but heavier and more costly)"
+      ],
+      "constraints": [
+        "Solar is the lightest and simplest power option",
+        "Every extra kilogram is costly to launch",
+        "No humans to clean the panels"
+      ],
+      "fact": "Opportunity was built to work for 90 Martian days, but it kept going for more than 14 years and drove 45 km.",
+      "fact_ar": "صُممت أبورتشونيتي لتعمل 90 يوماً مريخياً، لكنها استمرت أكثر من 14 عاماً وقطعت 45 كيلومتراً."
+    },
+    {
+      "id": "cohesive_soil",
+      "title": "Heat probe could not dig (InSight mole)",
+      "title_ar": "مسبار الحرارة لم يستطع الحفر (خُلد إنسايت)",
+      "artifacts": [
+        "InSight lander heat probe (the mole)"
+      ],
+      "problem": "A self-hammering heat probe could not dig into the Martian soil.",
+      "problem_ar": "مسبار حرارة يدقّ نفسه في الأرض لم يستطع الحفر في تربة المريخ.",
+      "root_cause": "The soil clumped together and did not give the probe the friction it needed to pull itself down.",
+      "nasa_tried": [
+        "Pressed on the probe with the robotic arm scoop",
+        "Scraped soil on top of the probe to add friction",
+        "Almost two years of attempts, which ended in January 2021"
+      ],
+      "constraints": [
+        "Small, low-power tools only",
+        "One robotic arm",
+        "No humans"
+      ],
+      "fact": "InSight's heat probe was designed to dig 5 meters deep. After almost two years of trying, it only got just below the surface.",
+      "fact_ar": "صُمم مسبار الحرارة في إنسايت ليحفر 5 أمتار في عمق المريخ، لكنه بعد قرابة عامين من المحاولة لم يتجاوز ما تحت السطح بقليل."
+    },
+    {
+      "id": "hidden_soft_sand",
+      "title": "Stuck in hidden soft sand (Spirit)",
+      "title_ar": "العالقة في رمل ناعم مخفي (سبيريت)",
+      "artifacts": [
+        "Spirit rover"
+      ],
+      "problem": "The rover got stuck in hidden soft sand and could not drive out.",
+      "problem_ar": "المركبة علقت في رمل ناعم مخفي ولم تستطع الخروج منه.",
+      "root_cause": "In May 2009 its wheels broke through a thin surface crust into soft sand underneath. It was driving on only five working wheels.",
+      "nasa_tried": [
+        "Months of tests with a rover model on Earth and planned escape drives",
+        "Turned Spirit into a stationary science station",
+        "The mission ended in May 2011"
+      ],
+      "constraints": [
+        "The soft sand is hidden under a crust",
+        "Drives are planned from Earth with long delays",
+        "Limited power"
+      ],
+      "fact": "Spirit was built for 90 Martian days but worked for more than 6 years, until it got stuck in soft sand in 2009.",
+      "fact_ar": "صُممت سبيريت لتعمل 90 يوماً مريخياً، لكنها عملت أكثر من 6 سنوات، حتى علقت في رمل ناعم عام 2009."
+    },
+    {
+      "id": "featureless_terrain_navigation",
+      "title": "Lost over smooth sand (Ingenuity)",
+      "title_ar": "الضياع فوق رمال ملساء (إنجينيويتي)",
+      "artifacts": [
+        "Ingenuity helicopter"
+      ],
+      "problem": "The helicopter lost track of its position and speed over smooth sand, landed hard and damaged its rotor blades.",
+      "problem_ar": "المروحية فقدت معرفة موقعها وسرعتها فوق رمال ملساء، فهبطت بقوة وتضررت شفراتها.",
+      "root_cause": "Its navigation camera tracks surface features. Over featureless sand ripples it had too few features to track (flight 72, January 2024).",
+      "nasa_tried": [
+        "The investigation recommended better navigation over low-texture terrain for future Mars helicopters"
+      ],
+      "constraints": [
+        "Lift is hard in the thin atmosphere",
+        "Very small mass budget",
+        "No GPS on Mars"
+      ],
+      "fact": "In April 2021, Ingenuity made the first powered, controlled flight on another planet. It was planned for 5 flights and made 72.",
+      "fact_ar": "في أبريل 2021 حققت إنجينيويتي أول طيران متحكَّم به بمحرك على كوكب آخر. خُطط لها 5 رحلات، فطارت 72 رحلة."
+    }
+  ]
+}
