@@ -3,6 +3,8 @@
 Evaluates a user's idea for an open NASA hardware failure and decides: **send to NASA** or **do not send**.
 Pure Python standard library: nothing to install.
 
+**Demo video (2 min):** [demo/Mission_Echoes_demo.mp4](demo/Mission_Echoes_demo.mp4)
+
 ## Run it (Windows, VS Code terminal)
 
 ```bash
