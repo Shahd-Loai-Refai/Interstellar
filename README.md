@@ -1,143 +1,188 @@
-# Mission Engineer — AI agent (Team Interstellar, NASA Space Apps 2026)
+# Mission Echoes 🚀
+### Team Interstellar · NASA Space Apps Challenge 2026 · Ramallah
 
-Evaluates a user's idea for an open NASA hardware failure and decides: **send to NASA** or **do not send**.
-Pure Python standard library: nothing to install.
+**Challenge:** *Abandoned but not Forgotten: Storytelling about NASA's Discarded Equipment on the Moon and Mars*
 
-**Demo video (2 min):** [demo/Mission_Echoes_demo.mp4](demo/Mission_Echoes_demo.mp4)
+Mission Echoes is a web-based interactive VR simulation that brings NASA hardware left on the Moon and Mars back to life, then turns the visitor into the engineer who helps the next mission succeed. It runs in any browser on a laptop, a phone or a VR headset (WebXR), with nothing to install.
 
-## Run it (Windows, VS Code terminal)
+> 🎬 **Demo video (2 min):** [demo/Mission_Echoes_demo.mp4](demo/Mission_Echoes_demo.mp4)
+
+---
+
+## The problem
+
+Most students only *read* about space missions. They memorise a fact and forget it a few days later. Meanwhile, NASA hardware on the Moon and Mars carries real stories of success and failure that never reach a classroom. Some of these failures are still not fully solved.
+
+## Our solution
+
+We turn each abandoned machine into a story the student **lives**, then **finishes** with their own idea.
+
+| Step | What the user does |
+|---|---|
+| 1. Pick a character | The Dreamer, The Gamer or The Physics Student. Each one has its own colours and ending. |
+| 2. Explore the Moon and Mars | Zoom into an interactive map of real NASA landing sites: Apollo 11, the Apollo 15 and 17 Lunar Roving Vehicles and Surveyor 3 on the Moon; Spirit, Opportunity, Ingenuity and InSight on Mars. |
+| 3. Live the story in 3D or VR | Walk around NASA's real InSight lander on Martian terrain and run its experiments: the heat probe digging into the ground and the seismometer listening for marsquakes. Narration and sound effects follow every event. |
+| 4. Save the mission | Learn what really went wrong, then answer one question: *How would you save the next mission?* |
+| 5. Get a decision | The **Mission Engineer** AI agent evaluates the idea and replies with a clear, encouraging explanation. |
+| 6. Share a Mission Reel | A vertical video made from moments recorded inside the 3D scene, the user's photo in an astronaut helmet, a mission patch if the idea was accepted, and ready-made hashtags. |
+
+---
+
+## The Mission Engineer agent
+
+The agent acts like a NASA engineer reviewing ideas. For each failure it receives a **problem card**: verified facts from NASA sources and the solutions NASA already tried.
+
+### Five criteria, each scored from 1 to 5
+
+| Criterion | Question | Weight |
+|---|---|---|
+| Root cause | Does the idea address the real cause of the failure? | ×5 |
+| Principle | Is it physically sound on Mars: thin air, dust, cold, low power, no humans to repair it? | ×5 |
+| Novelty | Is it different from what NASA already tried? | ×4 |
+| Feasibility | Could engineers build it within mass and power limits? | ×3 |
+| Simplicity | Does it avoid adding new parts and new ways to fail? | ×3 |
+
+```
+total = 5 × RootCause + 5 × Principle + 4 × Novelty + 3 × Feasibility + 3 × Simplicity   (max 100)
+
+send to NASA  only if  RootCause ≥ 3  and  Principle ≥ 3  and  Novelty ≥ 4  and  total ≥ 75
+```
+
+### Why the decision can be trusted
+
+- **Our code has the final word.** It recomputes the score and applies the rule itself, so the decision never depends on the language model's arithmetic.
+- **Consistent.** The same idea always gets the same result.
+- **Grounded.** The agent may use only the facts in the problem card plus well-established physics.
+- **Fair to every student.** It understands Modern Standard Arabic, Arabic dialects (Palestinian, Egyptian, Gulf), Arabizi and English. Spelling or dialect never lowers a score.
+- **Protected.** Text the user writes is treated only as an idea to evaluate, never as instructions. Empty, unrelated or inappropriate input is rejected.
+- **A human in the loop.** For every accepted idea, the agent writes a short English report for NASA: the problem, the idea, why it could help and its main risk. A team member reviews the report before it is sent.
+
+### Open problems covered
+
+| Machine | Failure |
+|---|---|
+| InSight | Its self-hammering heat probe ("the mole") could not dig into the Martian soil. |
+| Opportunity, InSight | Dust stopped sunlight from reaching the solar panels, so the spacecraft ran out of power. |
+| Spirit | The rover got stuck in hidden soft sand and could not drive out. |
+| Ingenuity | The helicopter lost track of its position over smooth sand, landed hard and damaged its rotor blades. |
+
+---
+
+## How it works
+
+```mermaid
+flowchart LR
+    A[Character + Moon/Mars map] --> B[InSight 3D / VR simulation]
+    B -- mission events --> C[Narration, sound and reel moments]
+    B --> D[Save the mission: the user's idea]
+    D --> E[Python server]
+    E --> F[Mission Engineer agent]
+    F --> G[Our code checks the score and the rule]
+    G --> H[Decision + message to the student]
+    G --> I[Report for NASA]
+    H --> J[Mission Reel]
+```
+
+- The 3D scene tells the website when each mission starts and ends (`postMessage`). The website then plays the narration, records reel moments and opens the challenge.
+- The Mission Reel is built entirely on the user's device. Nothing is uploaded.
+
+---
+
+## Technology
+
+| Area | Tools |
+|---|---|
+| Languages | JavaScript, HTML, CSS, Python |
+| 3D and VR | three.js (WebGL), WebXR, GLTF models with Draco compression, custom shaders (Martian sky, marsquake waves), procedural terrain from noise functions, raycasting for desktop and VR controllers, Vite (development) |
+| NASA data | NASA 3D Resources (official InSight model), NASA mission pages |
+| AI | Large language model through its API (Google Gemini by default; Anthropic Claude and OpenAI also supported), prompt engineering with a fixed scoring rubric, JSON output |
+| Backend | Lightweight Python server built only on the standard library |
+| Browser APIs | Web Audio API (narration and sound), Canvas + MediaRecorder (Mission Reel), postMessage (3D scene ↔ website) |
+| Media | FFmpeg (demo video); Python with NumPy and SciPy to create every sound effect in code, with no music |
+| Collaboration | Git and GitHub |
+
+---
+
+## Run it locally
+
+Requirements: Python 3.9 or newer and a recent browser (Chrome or Edge). A VR headset is optional.
 
 ```bash
-python test_cases.py      # runs 3 demo ideas
-python server.py          # then open http://localhost:8000
+python server.py
 ```
 
-Without an API key it runs in **mock mode** (placeholder scores) so you can test the website.
-For real evaluation:
+Then open **http://localhost:8000/demo.html**.
 
-1. Copy `.env.example` to `.env`
-2. Set `PROVIDER` (`anthropic`, `openai` or `gemini`) and paste your `API_KEY`
-3. Optional: set `MODEL` if you want a different model than the default
-4. Restart `python server.py`
+To try the 3D scene on its own, open http://localhost:8000/insight/.
 
-## Files
+---
 
-| File | What it does |
-| --- | --- |
-| `agent/prompt.py` | The system prompt and the message template |
-| `agent/problems.json` | The 4 open problems (facts + what NASA tried) |
-| `agent/agent.py` | Calls the model, checks the JSON, recomputes the score and the decision, saves results |
-| `server.py` | Web server + API for the 3D / 360 website |
-| `static/index.html` | Engineer challenge page (embedded in the 3D site) |
-| `static/reel.js` | Mission Reel: records moments and builds the vertical video on the user's device |
-| `static/demo.html` | The full site: character → Mars map → 3D story → engineer challenge → Mission Reel |
-| `static/insight/` | The 3D team's InSight scene (three.js), served as is, no build step |
-| `static/sounds/` | Narration, sound effects and Mars wind for the 3D story (no music) |
-| `test_cases.py` | 3 demo ideas: weak, already tried by NASA, new |
-| `data/submissions.jsonl` | Every evaluation (created automatically) |
-
-## The 3D scene inside the site
-
-Open `http://localhost:8000/demo.html`. Clicking InSight on the Mars map opens the 3D scene
-full window. `static/insight/` is the 3D project's `src/` and `public/` copied as is, with three
-small changes so it runs from this server without Vite:
-
-- `index.html` links `src/style.css` and has an import map: `three` points to `vendor/three/`
-  (three.js 0.187, the same version as the project).
-- `src/scenes/marsScene.js` finds the model next to the code (`models/insight.glb`).
-- `src/bridge.js` tells the site when Mars opens and when each mission starts and ends.
-  `main.js` and `mission/mission.js` call it. Opened on its own (`/insight/`), it does nothing.
-
-The site plays the narration and sounds on those events, records the reel moments from the
-3D canvas, and shows "Story finished" after a mission, which opens the engineer challenge.
-When the 3D team changes the scene, copy their new `src/` over `static/insight/src/` and
-keep these three changes.
-
-## API (for the 3D / 360 website)
-
-```js
-const res = await fetch("http://localhost:8000/api/evaluate", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ problem_id: "dust_solar_panels", text: userIdea, language: "ar" })
-});
-const result = await res.json();   // result.decision, result.message_to_user, result.total ...
-```
-
-- `GET /api/problems` — list of problems (`id`, `title`, `problem`)
-- `POST /api/evaluate` — evaluate one idea
-- `GET /api/report` — Markdown report of every idea the agent chose to send
-
-Problem ids: `dust_solar_panels`, `cohesive_soil`, `hidden_soft_sand`, `featureless_terrain_navigation`.
-
-The 3D / 360 site can open the idea page directly for a problem and a language:
-`http://localhost:8000/?problem=dust_solar_panels&lang=ar` (or `lang=en`).
-
-## Mission Reel: engineer badge
-
-Embed the idea page in the 3D site as an iframe. When the challenge ends, the page sends a message to the 3D site:
-
-```js
-window.addEventListener("message", (e) => {
-  if (e.data?.type !== "mission-engineer-result") return;
-  // e.data.decision: "send_to_nasa" | "do_not_send" | "skipped" | "error"
-  // e.data.badge: true only when the agent chose to send the idea to NASA
-  if (e.data.badge) reel.addEngineerBadge();   // your reel code
-});
-```
-
-The reel shows the engineer badge **only** when `badge` is `true`.
-
-## Mission Reel (`static/reel.js`)
-
-Try the whole flow before merging: run `python server.py` and open `http://localhost:8000/demo.html`.
-The demo uses a simple 2D stand-in scene. In the 3D site, replace it and keep the same 3 calls:
-
-```html
-<script src="reel.js"></script>
-```
-
-```js
-// 1. once, after the scene and the AudioContext are created
-const audioIn = Reel.attach(renderer.domElement, audioContext);
-masterGain.connect(audioIn);              // Three.js: listener.gain.connect(audioIn)
-
-// 2. on every interaction (push, dig...): saves a 3.5 s clip
-Reel.captureMoment("push");
-
-// 3. after the engineer challenge
-const reel = await Reel.build({
-  title: problem.title_ar,                // or problem.title in English
-  machine: "إنسايت",                      // short machine name ("InSight" in English)
-  machineTag: "#InSight",                 // added to the hashtags
-  fact: problem.fact_ar,                  // or problem.fact
-  badge: result.badge,                    // from the "mission-engineer-result" message
-  photo: await Reel.loadPhoto(file),      // optional, only after the user agrees
-  lang: "ar",
-  onProgress: p => bar.style.width = p * 100 + "%"
-});
-await Reel.share(reel);                   // share sheet on mobile (with reel.caption), download on desktop
-// reel.caption = one line + hashtags, ready to copy
-// Reel.drawPoster(canvas, sameOptions) draws the last frame as a preview before building
-```
-
-Notes for the 3D team:
-- Narration must be an audio file played through the same `AudioContext`; `speechSynthesis` cannot be recorded.
-- With Three.js, create the renderer with `preserveDrawingBuffer: true` if captured frames come out black.
-- In VR the headset view is doubled (one image per eye): record from a normal spectator camera instead.
-- The reel is about 20 s: title, 3 moments, a real fact, then the finale: the user's photo in the helmet, the engineer patch (only if `badge` is true) and the hashtags.
-- Everything runs in the browser. Nothing is uploaded.
-- Chrome and Safari record H.264 MP4 when they can; otherwise the file is WebM, which some apps do not accept.
-
-## How the decision works
-
-The model scores 5 criteria (1-5). The code recomputes:
+## Project structure
 
 ```
-total = 5*root_cause + 5*principle + 4*novelty + 3*feasibility + 3*simplicity   (max 100)
-send_to_nasa  if root_cause >= 3 and principle >= 3 and novelty >= 4 and total >= 75
+mission-engineer/
+├── server.py              Web server and API
+├── agent/
+│   ├── agent.py           Calls the model, checks its answer, recomputes the score and the decision
+│   ├── prompt.py          The agent's instructions and scoring rubric
+│   └── problems.json      The open problems: NASA facts and what NASA already tried
+├── static/
+│   ├── demo.html          The full website: characters → map → 3D story → challenge → reel
+│   ├── index.html         The "Save the mission" challenge page
+│   ├── reel.js            Mission Reel video builder
+│   ├── insight/           InSight 3D / VR simulation (three.js + WebXR)
+│   ├── characters/        Character images
+│   └── sounds/            Narration, sound effects and Mars wind
+├── demo/                  Demo video
+└── test_cases.py          Three sample ideas: weak, already tried by NASA, and new
 ```
 
-If the model's math or decision is off, the code corrects it (`corrected_by_code: true`).
+---
 
-Before anything is really emailed to NASA, have a team member read the report.
+## Privacy and safety
+
+- No personal information is requested. If a user writes a name or contact details, they are removed from the output.
+- The user's photo for the reel never leaves their device.
+- The agent ignores any instructions hidden inside a user's idea.
+
+---
+
+## Future work
+
+- Test the experience in schools with VR headsets.
+- Bring it to schools and universities.
+- An AI model that learns each user's style and adapts the experience to them.
+- Add 3D stories for more abandoned machines on the Moon and Mars.
+
+---
+
+## Team Interstellar
+
+| Member | Role |
+|---|---|
+| Shatha Yasin | Technical Development & VR Environment Design |
+| Sarah Jack | Research & Scientific Fact-Checking |
+| Toqa Masoud | Storytelling & Creative Direction |
+| Rama Darwazeh | Presentation & Communication |
+| Shahd Loai | AI-Assisted Feedback & User Experience Evaluation |
+
+---
+
+## Sources
+
+**NASA**
+- InSight mission: https://science.nasa.gov/mission/insight/
+- Ingenuity Mars Helicopter: https://science.nasa.gov/mission/mars-2020-perseverance/ingenuity-mars-helicopter/
+- NEAR Shoemaker mission: https://science.nasa.gov/mission/near-shoemaker/
+- Pioneer 10 mission: https://science.nasa.gov/mission/pioneer-10/
+- Kepler mission: https://science.nasa.gov/mission/kepler/
+- NASA 3D Resources: https://science.nasa.gov/3d-resources/
+
+**Video references**
+- https://youtu.be/1Mqsd0ru_pc
+- https://youtu.be/4RFUkJ31x5s
+
+**Narration voice**
+- ElevenLabs, voice "Spuds Oxley": https://elevenlabs.io/voices/NOpBlnGInO9m6vDvFkFC
+
+Built for the NASA Space Apps Challenge 2026. three.js is used under the MIT License.
